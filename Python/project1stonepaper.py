@@ -1,3 +1,5 @@
+#Stone paper scissors Game
+
 import random
 
 def game(comp,user):
