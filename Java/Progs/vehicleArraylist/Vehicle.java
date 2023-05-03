@@ -17,13 +17,13 @@ package com.vehicleAl;
 import java.time.LocalDate;
 
 public class Vehicle {
-	
-	private String chasisno,company;
+
+	private String chasisno, company;
 	private Color color;
 	private double baseprice;
 	private LocalDate mfgDate;
 	private double netprice;
-	
+
 	public Color getColor() {
 		return color;
 	}
@@ -39,21 +39,19 @@ public class Vehicle {
 		this.baseprice = baseprice;
 		this.mfgDate = mfgDate;
 	}
-	
-	public Vehicle(String chasisno)
-	{
-		this.chasisno=chasisno;
+
+	public Vehicle(String chasisno) {
+		this.chasisno = chasisno;
 	}
 
 	@Override
 	public String toString() {
 		return "Vehicle [chasisno=" + chasisno + ", company=" + company + ", color=" + color + ", Netcost="
-				+ netprice + ", mfgDate=" + mfgDate + "]";
+				+ baseprice + ", mfgDate=" + mfgDate + "]";
 	}
-	
-	
+
 	public double getNetprice() {
-		return netprice;
+		return baseprice;
 	}
 
 	public void setNetprice(double netprice) {
@@ -65,18 +63,17 @@ public class Vehicle {
 	}
 
 	@Override
-	public boolean equals(Object o)
-	{
-		if(o instanceof Vehicle)
-		{
-			return this.chasisno.equals(((Vehicle)o).chasisno);
+	public boolean equals(Object o) {
+		if (o instanceof Vehicle) {
+			return this.chasisno.equals(((Vehicle) o).chasisno);
 		}
 		return false;
 	}
-	
-	
-	
-	
-	
+
+	@Override
+	public int compareTo(Vehicle othervehicle) {
+		// System.out.println("in");
+		return this.chasisno.compareTo(othervehicle.chasisno); // if 1>2 ie +ve then swap will happen
+	}
 
 }
