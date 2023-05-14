@@ -1,0 +1,1205 @@
+1)
+select s.sname,m.marks,c.duration
+from student s, course c, marks m
+where s.sid=m.studid and c.cid=m.courseid and s.sname='amit';
+
+2)
+select e.empno,e.ename,e.sal,e.deptno,s.grade,d.dname
+from emp e, salgrade s, dept d
+where e.deptno=d.deptno and e.sal between s.losal and s.hisal;
+
+3)
+select e.empno,e.ename,e.sal,e.deptno,s.grade,d.dname
+from emp e, salgrade s, dept d
+where e.deptno=d.deptno and e.sal between s.losal and s.hisal and dname in ('sales','purchase');
+
+4)
+select empno,ename,sal,e.deptno,s.grade,dname
+from emp e, salgrade s, dept d
+where e.deptno=d.deptno and e.sal between s.losal and s.hisal and dname in ('sales','accounting') and e.sal>2000;
+
+5)
+select e.empno,e.ename,e.sal,e.mgr,m.ename,m.sal"manager sal"
+from emp e, emp m
+where e.mgr=m.empno;
+
+6)
+select e.empno,ename,sal,dname
+from emp e inner join dept d on e.deptno=d.deptno;
+
+7)
+select empno,ename,sal,dname 
+from emp e right join dept d on e.deptno=d.deptno;
+
+8)
+select empno,ename,sal,dname
+from emp e left join dept d on e.deptno=d.deptno;
+
+9)
+select empno,ename,sal,dname
+from emp e left join dept d on e.deptno=d.deptno
+union
+select empno,ename,sal,dname
+from emp e right join dept d on e.deptno=d.deptno
+
+10)
+create table manager(
+mgrid int primary key,
+mname varchar(15) not null,
+mobile varchar(15) unique
+)
+
+
+11)
+create table customer(
+cstid int primary key,
+cname varchar(15) not null,
+address varchar(15) not null,
+mgrid int ,
+constraint fk_mgr foreign key(mgrid) references manager(mgrid)
+on delete set null 
+on update cascade
+);
+
+12)
+create table account(
+acid int primary key,
+cstid int,
+type varchar(20),
+balance double(9,2) check(balance>0),
+constraint fk_cst foreign key(cstid) references customer(cstid)
+on delete set null
+on update cascade
+);
+
+13)
+
+select c.cstid,cname,acid,balance,m.mgrid
+from manager m inner join customer c on m.mgrid=c.mgrid inner join account a on c.cstid=a.cstid ;
+
+14)
+select c.cstid,cname,acid,balance,m.mgrid
+from manager m,customer c, account a
+where m.mgrid=c.mgrid and c.cstid=a.cstid and c.address='nashik';
+
+select c.cstid,cname,acid,balance,m.mgrid,m.mname
+from manager m,customer c, account a
+where m.mgrid=c.mgrid and c.cstid=a.cstid and m.mname='tanaya';
+
+
+create table product(
+pid int primary key,
+pname varchar(20) not null unique,
+price double(9,2) check(price>0),
+cid int,
+sid int,
+constraint fk_cid2 foreign key(cid) references category(cid)
+on delete set null
+on update cascade,
+constraint fk_sid2 foreign key(sid) references salesman(sid)
+on delete set null
+on update cascade
+);
+
+
+create table category(
+cid int primary key,
+cname varchar(15) not null,
+descrip varchar(15)
+);
+
+create table salesman(
+sid int primary key,
+sname varchar(15) not null,
+address varchar(15) 
+);
+
+insert into category(cid,cname,descrip) values(1,'Chips','Crispy'),(2,'bicuits','sweet'),(3,'cold drink','cool');
+
+insert into salesman(sid,sname,address) values(1,'Janmajay','Gwalior'),(2,'Shubham','Raipur'),(3,'krishna','Banaras');
+
+insert into product(pid,pname,price,cid,sid) values(1,'Lays',10,1,2),(2,'Puffcorn',20,1,1),(3,'Hide n seek',35,2,2),(4,'Coke',50,3,2);
+
+select pname,cname,sname
+from product p,salesman s , category c
+where p.cid=c.cid and p.sid=s.sid;
+
+
+select pname,sname
+from product p, salesman s 
+where p.sid=s.sid and s.address='Raipur';
+
+select pname'Product',cname'Category'
+from product p, category c
+where p.cid=c.cid;
+
+
+create table room(
+roomid int primary key,
+rname varchar(20) not null unique,
+rloc varchar(20) not null 
+);
+
+insert into room(roomid,rname,rloc) values(100,'jasmin','1st room'),(101,'Rose','2nd floor'),(105,'Lotus','1st floor'),(103,'Mogra','1st floor');
+
+create table faculty(
+fid int primary key,
+fname varchar(20) not null,
+skill1 varchar(20) not null,
+skill2 varchar(20) not null
+);
+
+insert into faculty(fid,fname,skill1,skill2) values(10,'kjzhcjhz','a','b'),(11,'sdd','x','z'),(12,'iksjk','a','x'),(13,'zkjd','a','b');
+
+create table courses(
+cid int primary key,
+cname varchar(20) not null unique,
+rid int,
+fid int,
+constraint fk_rid foreign key(rid) references room(roomid),
+constraint fk_fid foreign key(fid) references faculty(fid)
+on delete set null
+on update cascade
+); 
+
+insert into courses(cid,cname,rid,fid) values(121,'DBDA',100,10),(131,'DAC',101,null),(141,'DTISS',null,null),(151,'DIOT',105,12);
+
+
+
+select * 
+from room r left join courses c on r.roomid=c.rid;
+
+
+
+select r.rname,f.fname,c.cname
+from faculty f left join courses c on f.fid=c.fid left join room r on r.roomid=c.rid
+union
+select r.rname,null,c.cname
+from room r left join courses c on r.roomid=c.rid
+where c.fid is null
+
+
+
+select r.rname,c.cname
+from room r left join courses c on r.roomid=c.rid;
+
+
+select c.cstid,c.cname,a.acid,a.balance,m.mgrid
+from customer c, account a, manager m
+where c.cstid=a.cstid and m.mgrid=c.mgrid;
+
+select c.cstid,c.cname,a.acid,a.balance,m.mgrid
+from customer c, account a, manager m
+where c.cstid=a.cstid and m.mgrid=c.mgrid and c.address='Nashik';
+
+
+
+select c.cstid,c.cname,a.acid,a.balance,m.mgrid
+from customer c, account a, manager m
+where c.cstid=a.cstid and m.mgrid=c.mgrid and m.mname='tanaya';
+
+
+
+select c.cstid,c.cname,a.acid,a.balance,m.mgrid,m.mname
+from customer c, account a, manager m
+where c.cstid=a.cstid and m.mgrid=c.mgrid and m.mname like 'r%';
+
+
+select c.cstid,c.cname,a.acid,a.balance,m.mgrid,m.mname,a.type
+from customer c, account a, manager m
+where c.cstid=a.cstid and m.mgrid=c.mgrid and a.type='dmat';
+
+
+select c.cstid,c.cname,c.address,c.mgrid,a.acid,a.cstid,a.type,a.balance
+from customer c, account a
+where c.mgrid=m.mgrid and a.balance>3000 and c.address='pune';
+
+select c.cstid,c.cname,c.address,c.mgrid,m.mgrid,m.mname,m.mobile
+from manager m left join customer c on m.mgrid=c.mgrid;
+
+select c.cstid,c.cname,c.address,c.mgrid,a.acid,a.cstid,a.type,a.balance
+from account a left join customer c on a.cstid=c.cstid;
+
+
+select * from room r
+where not exists(select * from courses c where r.roomid=c.rid);
+
+
+
+select c.cname,f.fname,
+from courses c, faculty f
+where f.fid=c.fid and f.skill1='a' or f.skill2='b';
+
+
+
+update emp e
+set sal=(select sal from emp d where d.ename='miller')
+where e.ename='allen';
+
+
+update emp e 
+set sal=(select sal from (select * from emp) d where d.ename'miller')
+where e,deptno=
+
+
+create view mgr10
+as
+select * from emp
+where deptno=10
+with check option;
+
+insert into mgr10 values(123,'ddddd','CLERK',7782,'2022-11-11',34566,456,10);
+
+create table vehicle(
+vid int primary key,
+vname varchar(15) not null,
+price double(9,2) check(price>0),
+desc5 varchar(15)
+);
+
+insert into vehicle values(1,'Activa',80000,'dkah'),(2,'Santro',800000,'oeda'),(3,'Motor bike',100000,'fihfwe');
+
+
+create table customervehi(
+custoid int primary key,
+cname varchar(15) not null,
+address varchar(15) not null
+);
+
+
+insert into customervehi values(1,'Nilima','Pimpri'),(2,'Ganesh','Pune'),(3,'Pankaj','Mumbai');
+
+
+
+create table salesmanvehi(
+sid int primary key,
+sname varchar(15) not null,
+address varchar(15) not null
+);
+
+insert into salesmanvehi values(10,'Rajesh','Mumbai'),(11,'Seema','Rakhi'),(13,'Rakhi','Pune');
+
+
+create table cust_vehicle(
+custoid int,
+vid int,
+sid int,
+buy_price double(9,2),
+constraint fk_custoid foreign key(custoid) references customervehi(custoid),
+constraint fk_vid foreign key(vid) references vehicle(vid),
+constraint fk_sidd foreign key(sid) references salesmanvehi(sid)
+on delete set null
+on update cascade,
+constraint primary key(custoid,vid)
+);
+
+
+
+select * from emp
+where sal>(select avg(sal) from emp e where e.deptno=(select deptno from dept d where d.dname='sales'));
+
+
+
+insert into cust_vehicle values(1,1,10,75000),(1,2,10,790000),(2,3,11,80000),(3,3,11,75000),(3,2,10,800000);
+
+
+
+create index idx_price
+on vehicle(price);
+
+
+select cname,vname,sname,v.price-cu.buy_price 'discount'
+from vehicle v,customervehi c, salesmanvehi s, cust_vehicle cu
+where v.vid=cu.vid and c.custoid=cu.custoid and s.sid=cu.sid;
+
+select cname,vname,sname,s.address
+from vehicle v,customervehi c, salesmanvehi s, cust_vehicle cu
+where v.vid=cu.vid and c.custoid=cu.custoid and s.sid=cu.sid and s.address='pune' ;
+
+update salesmanvehi
+set address='Pune'
+where sname='Seema';
+
+select count(*)
+from cust_vehicle 
+where vid=(select vid from vehicle where vname='Motor bike');
+
+
+create view find_discount
+as
+select cname,vname,price,buy_price,price-buy_price 'Discount'
+from customervehi c, vehicle v, cust_vehicle cu
+where v.vid=cu.vid and c.custoid=cu.custoid ;
+
+
+select cname,vname,sname,v.price-cu.buy_price
+from vehicle v, customervehi c, salesmanvehi s, cust_vehicle cu
+where v.vid=cu.vid and c.custoid=cu.custoid and s.sid=cu.sid;
+
+
+create view my_hr
+as
+select empno,ename,job,comm
+from emp
+where comm>0 or comm is not null;
+
+
+create view mgr30 
+as
+select * from emp
+where deptno=30;
+
+insert into mgr30 values(6580,'Rutvik','Account','7788','2002-03-24',25000,500,10),(7215,'janmajeay','sales','7788','1999-08-04',3000,250,10);
+
+insert into dept values(50,'Production','India'),(60,'Development','Frankfurt'),(70,'Reception','Munich');
+
+delimiter //
+create procedure myproc()
+begin
+	select * from emp;
+end//
+delimiter ;
+
+delimiter //
+create procedure insert_product(in ppid int,in ppname varchar(20),pprice double(9,2),ccid int,ssid int)
+begin
+	insert into product values(ppid,ppname,pprice,ccid,ssid);
+end//
+delimiter ;
+
+delimiter //
+create procedure count_emp()
+begin
+	select count(*),deptno
+	from emp
+	where deptno=10;
+end//
+delimiter ;
+
+delimiter //
+create procedure count_emp(in ddeptno)
+begin
+	select count(*),deptno
+	from emp
+	where deptno=ddeptno;
+end//
+delimiter ;
+
+
+delimiter //
+create procedure count_emp(in ddeptno int)
+begin
+	select count(*),deptno
+	from emp
+	where deptno=ddeptno
+	group by deptno;
+end//
+delimiter ;
+
+delimiter //
+create procedure getcnt_by_dept(in pdno int,out cnt int)
+begin
+	select count(*) into cnt from emp where deptno=pdno;
+	end//
+	delimiter ;
+	
+	
+delimiter //	
+create procedure getcnt_min_dept(in pdno int,out cnt int,out minsal double(9,2))
+begin
+	select count(*),min(sal) into cnt,minsal
+	from emp
+	where deptno=pdno;
+end//
+delimiter ;
+
+
+delimiter //
+create procedure inc_count(inout cnt int)
+begin
+	set cnt=cnt+10;
+end//
+delimiter ;
+
+delimiter //
+create procedure disp_data(dno int,s double(9,2))
+begin
+	select * 
+	from emp
+	where sal>s;
+end//
+
+
+create procedure get_remark(deno int,out remark varchar(30))
+begin
+	declare vcm double(9,2);
+	select comm into vcm
+	from emp
+	where empno=deno;
+	if vcm is null or vcm=0 then
+		set remark='Need improvement';
+	elseif vcm<300 then
+		set remark='ok';
+	elseif vcm between 300 and 499 then
+		set remark='good';
+	else 
+		set remark='excellent';
+	end if;
+	select remark;
+	end //
+		
+		
+create procedure cal_netsal(pempno int,out fsal double(9,2),out remark varchar(30))
+begin
+	select sal+ifnull(comm,0) into fsal
+	from emp 
+	where empno=pempno;
+	if fsal<1000 then
+		set remark='less';
+	elseif fsal between 1000 and 1999 then
+		set remark='ok';
+	elseif fsal between 2000 and 2999 then
+		set remark='good';
+	else
+		set remark='better';
+	end if;
+	select fsal,remark;
+	end //
+
+
+create procedure getmin(in pdeptno int,out minsal double(9,2))
+begin
+	select min(sal) into minsal
+	from emp 
+	where deptno=pdeptno;
+end //
+
+
+select sum(sal+ifnull(comm,0)) 'total sal' , avg(sal+ifnull(comm,0)) 'avg'
+from emp 
+where sal>2000 and deptno in (10,20)
+group by deptno;
+	
+
+	
+create table time as
+(
+select * from emp
+where 1=2
+);
+
+
+update emp e
+set sal=(select sal from (select * from emp) d where d.ename='miller')
+where e.deptno=(select deptno from (select * from emp) c where c.ename='Wall');
+
+
+delimiter //
+create procedure getdiscount(in ppid int,out discount float(5,2),out dis_amt double(9,2))
+begin
+	declare vp double(9,2);
+	select price into vp from product where pid=ppid;
+	if vp<20 then
+		set discount=3;
+	elseif vp between 20 and 40 then
+		set discount=7;
+	else
+		set discount=10;
+	end if;
+	set dis_amt=vp-((vp*discount)/100);
+end//
+
+delimiter //
+create procedure cnt(in start int,in end int)
+begin
+	declare vstr int default start;
+	declare str varchar(100) default '';
+	
+	while vstr <=end do
+	set str=concat(str,vstr,',');
+	set vstr=vstr+1;
+	end while;
+	
+	set str=substr(str,1,length(str)-1);
+	select str;
+end//
+
+
+create procedure factorial(in num int)
+begin
+	declare vnum int default 1;
+	declare factr int default 1;
+	while vnum<=num do
+		set factr=factr*vnum;
+		set vnum=vnum+1;
+	end while;
+	select factr;
+end//
+
+delimiter //
+create procedure cnt2(in start int, in end int)
+begin
+	declare vstart int default start;
+	declare str varchar(100) default '';
+	repeat
+	set str=concat(str,vstart,',');
+	set vstart=vstart+1;
+	until vstart>end
+	end repeat;
+	set str=substr(str,1,length(str)-1);
+	select str;
+end//
+delimiter ;
+
+
+delimiter //
+create procedure factorial2(in num int)
+begin
+	declare vnum int default 1;
+	declare factr int default 1;
+	repeat
+	set factr=factr*vnum;
+	set vnum=vnum+1;
+	until vnum>num
+	end repeat;
+	select factr;	
+end//
+delimiter ;
+
+
+delimiter //
+create procedure cnt3(start int,end int)
+begin
+	declare vstr int default start;
+	declare str varchar(100) default '';
+	l1:loop
+	set str=concat(str,vstr,',');
+	set vstr=vstr+1;
+	if vstr >end then
+		leave l1;
+	end if;
+	end loop;
+	set str=substr(str,1,length(str)-1);
+	select str;
+end//
+delimiter ;
+
+
+
+delimiter //
+create procedure fact3(num int)
+begin
+	declare start int default 1;
+	declare factr int default 1;
+	l1:loop
+	set factr=factr*start;
+	set start=start+1;
+	if start>num then	
+		leave l1;
+	end if;
+	end loop;
+	select factr;
+end//
+delimiter ;
+
+
+delimiter //
+create procedure ins_emp(pempno int,pename varchar(10),psal decimal(7,2),pjob varchar(9),phiredate date)
+begin
+	insert into emp(empno,ename,sal,job,hiredate) values(pempno,pename,psal,pjob,phiredate);
+end//
+delimiter ;
+
+
+delimiter //
+create procedure del_rec(in pempno int)
+begin
+	delete from emp
+	where empno=pempno;
+end//
+delimiter ;
+
+
+delimiter //
+create procedure disp(in psal decimal(7,2))
+begin
+	select * from emp 
+	where sal>psal;
+end//
+delimiter ;
+
+
+
+
+
+delimiter //
+create procedure disp_details(in pdeptno int,out pmin decimal(7,2),out pmax decimal(7,2),out pavg decimal(7,2),out pcnt int)
+begin
+	select min(sal),max(sal),avg(sal),count(*) into pmin,pmax,pavg,pcnt
+	from emp
+	where deptno=pdeptno
+	group by deptno;
+end//
+delimiter ;
+
+
+delimiter //
+create procedure disp_prod()
+begin
+	select p.pid,pname,c.cid,cname,sname
+	from category c,salesman s, product p
+	where c.cid=p.cid and s.sid=p.sid;
+end//
+delimiter ;
+
+
+select vname 
+from vehicle
+where vid in (select vid from cust_vehicle where custoid=(
+select custoid from customervehi
+ where cname='Pankaj'));
+
+
+
+select vname
+from customervehi c,vehicle v,salesmanvehi s,cust_vehicle cu
+where v.vid=cu.vid and s.sid=cu.sid and c.custoid=cu.custoid and cname='pankaj';
+
+delimiter //
+create procedure
+begin
+
+end//
+delimiter ;
+
+delimiter //
+create procedure dispvehicle2(in pcname varchar(15))
+begin
+	select vname
+from customervehi c,vehicle v,salesmanvehi s,cust_vehicle cu
+where v.vid=cu.vid and s.sid=cu.sid and c.custoid=cu.custoid and cname=pcname;
+end//
+delimiter ;
+
+
+delimiter //
+create procedure disp_emp()
+begin
+	declare finished int default 0;
+	declare vempno,vmgr,vdeptno int;
+	declare vename,vjob varchar(10);
+	declare vhiredate date;
+	declare vsal,vcomm double(9,2);
+	declare emp_cur cursor for select * from emp;
+	declare continue handler  for NOT FOUND set finished=1;
+	
+	
+	open emp_cur;
+	l1:loop
+	fetch emp_cur into vempno,vename,vjob,vmgr,vhiredate,vsal,vcomm,vdeptno;
+	if finished=1 then
+		leave l1;
+	end if;
+	select vempno,vename,vsal,vsal,vdeptno;
+	end loop;
+	close emp_cur;
+end//
+delimiter ;
+	
+	
+delimiter //
+create procedure update_empsal(out pmcnt int,out pacnt int,out pccnt int,out pocnt int)
+begin
+	declare finished int default 0;
+	declare vempno,vmgr,vdeptno int;
+	declare vename,vjob varchar(10);
+	declare vhiredate date;
+	declare vsal,vcomm,vupd_sal double(9,2);
+	declare emp_cur cursor for select * from emp;
+	declare continue handler for NOT FOUND set finished=1;
+	set pmcnt=0;
+	set pacnt=0;
+	set pccnt=0;
+	set pocnt=0;
+	
+	open emp_cur;
+	
+	l1:loop
+	fetch emp_cur into vempno,vename,vjob,vmgr,vhiredate,vsal,vcomm,vdeptno;
+	if finished=1 then
+		leave l1;
+	end if;
+	
+	if vjob='manager' then
+		set vupd_sal=1.1*vsal;
+		update emp
+		set sal=1.1*sal
+		where empno=vempno;
+		set pmcnt=pmcnt+1;
+	elseif vjob='analyst' then
+		set vupd_sal=1.2*vsal;
+		update emp
+		set sal=sal*1.2
+		where empno=vempno;
+		set pacnt=pacnt+1;
+	elseif vjob='clerk' then
+		set vupd_sal=1.25*vsal;
+		update emp
+		set sal=sal*1.25
+		where empno=vempno;
+		set pccnt=pccnt+1;
+	else
+		set vupd_sal=1.08*vsal;
+		update emp
+		set sal=sal*1.08
+		where empno=vempno;
+		set pocnt=pocnt+1;
+	end if;
+	select vempno,vename,vjob,vsal,vcomm,vupd_sal;
+	end loop;
+select pmcnt,pacnt,pccnt,pocnt;
+close emp_cur;
+end //
+delimiter ;
+
+
+delimiter //
+create procedure updat_productprice()
+begin
+	declare finished int default 0;
+	declare vpid,vcid,vsid,vchipscatid,vcdid int;
+	declare vpname varchar(20);
+	declare vprice,vupdprice double(9,2);
+	declare prd_cur cursor for select * from product;
+	declare continue handler for NOT FOUND set finished=1;
+	
+	open prd_cur;
+	select cid into vchipscatid from category 
+	where cname='chips';
+	select cid into vcdid from category 
+	where cname='cold drink';
+	
+	
+	l1:loop
+	fetch prd_cur into vpid,vpname,vprice,vcid,vsid;
+	if finished=1 then
+		leave l1;
+	end if;
+	
+	if vcid=vchipscatid then
+		set vupdprice=1.1*vprice;
+		update product
+		set price=1.1*price
+		where pid=vpid;
+	elseif vcid=vcdid then
+		set vupdprice=1.2*vprice;
+		update product 
+		set price=1.2*price
+		where pid=vpid;
+	else
+		set vupdprice=1.08*vprice;
+		update product
+		set price=price*1.08
+		where pid=vpid;
+	end if;
+	select vpid,vpname,vprice,vupdprice;
+	end loop;
+
+	close prd_cur;
+end//
+delimiter ;
+	
+
+delimiter //
+create procedure generate_email()
+begin
+	declare finished int default 0;
+	declare vename,vjob varchar(20);
+	declare str varchar(1000) default '';
+	declare emp_cur cursor for select ename,job from emp;
+	declare continue handler for NOT FOUND set finished=1;
+	
+	open emp_cur;/
+	
+	l1:loop
+	fetch emp_cur into vename,vjob;
+	set str=concat(str,substr(vename,1,3),'.',substr(vjob,1,3),'@mycompany.com',',');
+	if finished=1 then
+		leave l1;
+	end if;
+	end loop;
+set str=substr(str,1,length(str)-1);
+select str;
+end //
+delimiter ;	
+
+
+delimiter //
+create procedure disp_empstatus()
+begin
+	declare finished int default 0;
+	declare vempno,vdeptno int;
+	declare vename,vjob,vstatus varchar(20);
+	declare vsal,vavgsal double(9,2);
+	declare emp_cur cursor for select empno,ename,job,sal,deptno from emp;
+	declare continue handler for NOT FOUND set finished=1;
+	
+	open emp_cur;
+	
+	
+	l1:loop
+	fetch emp_cur into vempno,vename,vjob,vsal,vdeptno;
+	if finished=1 then
+		leave l1;
+	end if;
+	select avg(sal) into vavgsal from emp where deptno=vdeptno group by deptno;
+	if vsal>vavgsal then
+		set vstatus='Greater';
+	elseif vsal<vavgsal then
+		set vstatus='Lesser';
+	elseif vsal=vavgsal then
+		set vstatus='Equal';
+	else
+		set vstatus='ERROR emp table is empty';
+	end if;
+	
+	select vempno,vename,vjob,vsal,vavgsal 'Avg sal',vdeptno,vstatus;
+	end loop;
+	close emp_cur;
+end//
+delimiter ;
+
+
+delimiter //
+create procedure upd_sal()
+begin
+	declare finished int default 0;
+	declare vempno,vexp int;
+	declare vename,vjob varchar(15);
+	declare vsal,vcomm,vupdsal double(9,2);
+	declare vhiredate date;
+	declare emp_cur cursor for select empno,ename,job,sal,comm,hiredate from emp;
+	declare continue handler for NOT FOUND set finished=1;
+	
+	open emp_cur;
+	
+	l1:loop
+	fetch emp_cur into vempno,vename,vjob,vsal,vcomm,vhiredate;
+	if finished=1 then
+		leave l1;
+	end if;
+	set vexp=round(datediff(curdate(),vhiredate)/365); 
+	
+	
+	if vexp<=35 then
+		set vupdsal=vsal;
+		update emp
+		set sal=sal
+		where empno=vempno;
+	elseif vexp between 36 and 38 then
+		set vupdsal=vsal*1.2;
+		update emp
+		set sal=sal*1.2
+		where empno=vempno;
+	else
+		set vupdsal=vsal*1.25;
+		update emp
+		set sal=sal*1.25
+		where empno=vempno;
+	end if;
+	select vempno,vename,vsal,vupdsal;
+	end loop;
+close emp_cur;
+end//
+delimiter ;
+	
+	
+delimiter //
+create function get_email(name varchar(20),job varchar(20)) returns varchar(50)
+begin
+	declare email varchar(50);
+	set email=concat(substr(name,1,3),'.',substr(job,1,3),'@company.com');
+	return email;
+end//
+delimiter ;
+	
+select get_email(ename,job) from emp;	
+
+
+delimiter //
+create function get_exp(hdate date) returns int
+begin
+	declare exp int;
+	set exp=floor(datediff(curdate(),hdate)/365);
+	return exp;
+end//
+delimiter ;
+
+delimiter //
+create function prddist(price double(9,2),qty int) returns double(9,2)
+begin
+	declare disamt double(9,2);
+	if qty<20 then
+		set disamt=price*0.9;
+	elseif qty<=30 then
+		set disamt=price*0.8;
+	else
+		set disamt=price*0.7;
+	end if;
+	return disamt;
+end//
+delimiter ;
+
+delimiter //
+create procedure add_allowance()
+begin
+	declare finished int default 0;
+	declare vempno,vexp,vaddallow int;
+	declare vename varchar(20);
+	declare vsal double(9,2);
+	declare vhiredate date;
+	declare emp_cur cursor for select empno,ename,sal,hiredate from emp;
+	declare continue handler for NOT FOUND set finished=1;
+	
+	open emp_cur;
+	
+	l1:loop
+	fetch emp_cur into vempno,vename,vsal,vhiredate;
+	set vexp=get_exp(vhiredate);
+	set vaddallow=vexp*3000;
+	insert into emp_allowance values(vempno,vename,vhiredate,vexp,vaddallow);
+	if finished=1 then
+		leave l1;
+	end if;
+	
+	select vempno,vename,vsal,vexp,vaddallow;
+	end loop;
+	close emp_cur;
+end//
+delimiter ;
+
+	
+delimiter //
+create procedure ins_emp(pempno int,pename varchar(10),psal decimal(7,2),pjob varchar(9),phiredate date)
+begin
+	insert into emp(empno,ename,sal,job,hiredate) values(pempno,pename,psal,pjob,phiredate);
+end//
+delimiter ;
+
+create table emp_allowance(
+empno int primary key,
+ename varchar(20),
+hiredate date,
+experience int,
+allowance double(9,2)
+);
+
+delimiter //
+create function cal_ctc(sal double(9,2),hdate date) returns double(9,2)
+begin
+	declare ctc double(9,2);
+	declare exp int;
+	declare da double(9,2);
+	declare hra double(9,2);
+	declare ta double(9,2);
+	declare allw double(9,2);
+	declare spallw double(9,2);
+	set exp=get_exp(hdate);
+	set da=sal*0.15;
+	set hra=sal*0.2;
+	set ta=sal*0.08;
+	set allw=da+hra+ta;
+	if exp<1 then
+		set spallw=0;
+	elseif exp<2 then
+		set spallw=sal*0.1;
+	elseif exp<4 then
+		set spallw=sal*0.2;
+	else
+		set spallw=sal*0.3;
+	end if;
+	set ctc=allw+spallw;
+	return ctc;
+end//
+delimiter ;
+
+select empno,ename,job,sal,deptno,get_exp(hiredate) 'experience',cal_ctc(sal,hiredate) 'ctc'
+from emp;
+
+
+
+delimiter //
+create procedure disp_emp2()
+begin
+	declare finished int default 0;
+	declare vempno int;
+	declare vename varchar(10);
+	declare vhiredate date;
+	declare vsal,vctc double(9,2);
+	declare emp_cur cursor for select empno,ename,sal,hiredate from emp;
+	declare continue handler  for NOT FOUND set finished=1;
+	
+	
+	open emp_cur;
+	l1:loop
+	fetch emp_cur into vempno,vename,vsal,vhiredate;
+	set vctc=cal_ctc(vsal,vhiredate);
+	if finished=1 then
+		leave l1;
+	end if;
+	select vempno,vename,vsal,vctc;
+	end loop;
+	close emp_cur;
+end//
+delimiter ;
+
+
+create table empsecurity(
+empno int,
+ename varchar(20),
+action varchar(20),
+Oldsal double(9,2),
+Newsal double(9,2),
+Uname varchar(20),
+action_date date
+);
+
+
+delimiter //
+create trigger emp_update before update on emp
+for each row
+begin
+	insert into empsecurity values(OLD.empno,OLD.ename,'update',OLD.sal,NEW.sal,user(),curdate());
+end //
+delimiter ;
+
+delimiter //
+create trigger emp_insert after insert on emp
+for each row
+begin
+	insert into empsecurity values(NEW.empno,New.ename,'insert',null,NEW.sal,user(),curdate());
+	end //
+delimiter ;
+
+
+delimiter //
+create trigger emp_delete after delete on emp
+for each row
+begin
+	insert into empsecurity values(OLD.empno,OLD.ename,'delete',OLD.sal,null,user(),curdate());
+end//
+delimiter ;
+
+create table discounts(
+pid int primary key,
+disc_percent int
+);
+insert into discounts(pid,disc_percent) values(1,3),(2,20),(3,8);
+
+create table product_dis(
+pid int,
+pname varchar(20),
+price double(9,2),
+dis_amt double(9,2),
+constraint fk_pid foreign key(pid) references discounts(pid)
+);
+
+insert into product_dis(pid,pname,price,dis_amt) values(1,'chair',2000,1940);
+
+
+delimiter // 
+create trigger upd_discamt after update on discounts
+for each row
+begin
+	update product_dis
+	set dis_amt=price-(price*NEW.disc_percent/100)
+	where pid=OLD.pid;
+end//
+delimiter ;
+
+update discounts
+set disc_percent=5
+where pid=1;
+
+create table emp_back(
+empno int,
+ename varchar(20),
+oldsal double(9,2),
+newsal double(9,2),
+uname varchar(20),
+actdate date
+);
+
+delimiter //
+create trigger emp_upd after update on emp
+for each row
+begin
+	insert into emp_back values(NEW.empno,NEW.ename,OLD.sal,NEW.sal,user(),curdate());
+end//
+delimiter ;
+
+
+create table empaudit(
+empno int,
+ename varchar(20),
+username varchar(20),
+chdate date,
+action varchar(20)
+);
+
+delimiter //
+create trigger emp_ist after insert on emp
+for each row
+begin
+	insert into empaudit values(NEW.empno,NEW.ename,user(),curdate(),'insert');
+end//
+delimiter ;
+
+delimiter //
+create trigger emp_del after delete on emp
+for each row
+begin
+	insert into empaudit values(OLD.empno,OLD.ename,user(),curdate(),'delete');
+end//
+delimiter ;
+
+
+create table vehicle_history(
+vno int,
+vname varchar(20),
+oldprice decimal(9,2),
+newprice decimal(9,2),
+chdate date,
+username varchar(20)
+);
+
+delimiter //
+create trigger upd_vehicleprice after update on vehicle
+for each row
+begin
+	insert into vehicle_history values(NEW.vid,NEW.vname,OLD.price,NEW.price,curdate(),user());
+end//
+delimiter ;
+
+
+
+select cid,c.cname,f.fid,fname
+from courses c right join faculty f on c.fid=f.fid 
+where cid exists;
+
+
+select cid,c.cname,f.fid,fname
+from courses c inner join faculty f on c.fid=f.fid;
+
+select cid,c.cname,f.fid,fname
+from courses c,faculty fact3
+where c.fid=f.fid;
+
+select fname,cname,rname
+from faculty f left join courses c on c.fid=f.fid left join room r on c.rid=r.roomid
+union
+select null,cname,rname
+from room r left join courses c on r.roomid=c.rid
+where fid is null;
+
+

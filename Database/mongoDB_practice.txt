@@ -1,0 +1,376 @@
+db.movie.find({rating:{$gt:5}}).pretty();
+db.movie.find({condition},{projection})
+db.movie.find().pretty();
+$or:[{},{}]
+{$in:[,,,]}
+$nin:[,,,]
+$mod:[,]
+{$type:""}
+insertMany:[{},{},{}]
+deleteOne:({})
+deleteMany:({})
+remove:({})
+updateOne({})            //update first matching document
+updateMany({condition},{action})
+update({condition},{action},{multi:true,upsert:true})
+$push:{$each:[,,,]}
+
+db.movie.find({}).pretty()
+db.movie.update({},{},{})
+
+$lt,$gt, $gte,$lt, $lte,$ne, $in , $nin, $exists,$mod
+$type, $and, $or, $not,$elemMatch, $size
+
+1. to find all movies with rating=5
+db.resto.find().pretty()
+
+2. to find all movies with rating=5 and price=200
+db.movie.find({rating:5,price:200}).pretty()
+
+
+3. to find all movies with rating >=5
+
+db.movie.find({rating:{$gte:5}}).pretty()
+
+4. to find all movies with rating >5
+db.movie.find({rating:{$gt:5}},{"_id":0,"rating":1,"name":1}).pretty()
+
+5. to find all movies with rating >5 and price < 400
+db.movie.find({rating:{$gt:5},price:{$lt:400}},{"_id":0,"rating":1,"name":1,"price":1}).pretty()
+
+
+6.to find all movies with rating >5 or price <400
+db.movie.find({$or:[{rating:{$gt:5}},{price:{$lt:400}}]},{"_id":0,"rating":1,"name":1,"price":1}).pretty()
+$or:[{rating:{$gt:5}},{price:{$lt:400}}]
+
+7. to find all movies with with price = either 200 or 210
+or 350
+db.movie.find({price:{$in:[200,210]}},{"_id":0,"rating":1,"name":1,"price":1}).pretty()
+
+7. to find all movies with with price not = either 200 or 210
+or 350
+db.movie.find({price:{$nin:[200,210]}},{"_id":0,"rating":1,"name":1,"price":1}).pretty()
+price:{$nin:[200,210]}
+
+8. to find all movies with odd ratings
+db.movie.find({rating:{$mod:[2,1]}},{"_id":0,"rating":1,"name":1,"price":1}).pretty()
+rating:{$mod:[2,1]}
+
+8. to find all movies with odd ratings, but display only 
+name and rating
+db.movie.find({rating:{$mod:[2,1]}},{"_id":0,"rating":1,"name":1}).pretty()
+
+10. display all movies all keys other than rating
+db.movie.find({},{"rating":1}).pretty()
+
+11. display all movies with price >=200 and < 400
+db.movie.find({price:{$gte:200},price:{$lt:400}},{"_id":0,"rating":1,"name":1,"price":1}).pretty()
+
+price:{}
+db.movie.find({price:{$gte:200,$lt:400}},{"_id":0,"rating":1,"name":1,"price":1}).pretty()
+
+
+12. display all movies with rating in string format
+db.movie.find({rating:{$type:"string"}},{"_id":0,"rating":1,"name":1,"price":1}).pretty()
+
+
+
+12. display all movies with rating not in string format
+db.movie.find({rating:{$not:{$type:"string"}}},{"_id":0,"rating":1,"name":1,"price":1}).count()
+
+
+13. to find all movies in which Amitabh has acted
+db.movie.find({actor:"Amitabh"},{"_id":0,"rating":1,"name":1,"price":1,"actor":1}).pretty()
+actor:"Amitabh"
+
+
+14. to find all movies in which Amitabh has acted, 
+and the name is at 0th position
+db.movie.find({"actor.0":"Amitabh"},{"_id":0,"rating":1,"name":1,"price":1,"actor":1}).pretty()
+
+15. to find all movies in which Amitabh has acted
+and the name is at 1st  position
+db.movie.find({"actor.1":"Amitabh"},{"_id":0,"rating":1,"name":1,"price":1,"actor":1}).pretty()
+
+16.  to find all movies in which Amitabh has acted
+db.movie.find({actor:/^[Aa]mitabh/},{"_id":0,"rating":1,"name":1,"price":1,actor:1}).pretty()
+
+17. find all movies with name 
+starts with p and ends with a or t
+db.movie.find({name:/^[AatT]/},{"_id":0,"rating":1,"name":1,"price":1}).pretty()
+name:/^[at]/
+
+18. display all movies which has 3 ators in the array
+db.movie.find({actor:{$size:3}},{"_id":0,"rating":1,"name":1,"price":1,actor:1}).pretty()
+actor:{$size:3}
+
+
+19. to find all movies with rating is null
+db.movie.find({rating:null},{"_id":0,"rating":1,"name":1,price:1,rating:1}).pretty()
+
+
+19. to find all movies which has rating  key and 
+is assigned to null 
+db.movie.find({},{"_id":0,"rating":1,"name":1,"price":1}).pretty()
+
+1. Write a MongoDB query to display all the documents in the collection restaurants
+db.resto.find().pretty().limit(2)
+2. Write a MongoDB query to display the fields restaurant_id, name, borough and cuisine 
+for all the documents in the collection restaurant.
+db.resto.find({},{_id:1,name:1,borough:1,cuisine:1}).pretty()
+
+3. Write a MongoDB query to display the fields restaurant_id, name, borough and cuisine,
+but exclude the field _id for all the documents in the collection restaurant.
+db.resto.find({},{_id:0,name:1,borough:1,cuisine:1}).pretty()
+
+
+4. Write a MongoDB query to display the fields restaurant_id, name, borough and zip code,
+but exclude the field _id for all the documents in the collection restaurant.
+db.resto.find({},{_id:0,name:1,borough:1,cuisine:1,"address.zipcode":1}).pretty().limit(5)
+
+
+5. Write a MongoDB query to display all the restaurant which is in the borough Bronx
+db.resto.find({borough:"Bronx"},{_id:0,name:1,borough:1,cuisine:1}).pretty()
+borough:"Bronx"
+
+6. Write a MongoDB query to display the first 5 restaurant which is in the borough Bronx.
+db.resto.find({borough:"Bronx"},{_id:0,name:1,borough:1,cuisine:1}).pretty().limit(5)
+
+
+7.Write a MongoDB query to display the next 5 restaurants after skipping first 5 which are in
+the borough Bronx.
+db.resto.find({borough:"Bronx"},{_id:0,name:1,borough:1,cuisine:1}).pretty().limit(5).skip(5)
+
+
+8. Write a MongoDB query to find the restaurants who achieved a score more than 90.
+db.resto.find({"grades.score":{$gt:90}},{_id:0,name:1,borough:1,cuisine:1,grades:1}).pretty().limit(5)
+"grades.score":{$gt:90}
+
+9. Write a MongoDB query to find the restaurants that achieved a score, more than 80 but
+less than 100.
+db.resto.find({"grades.score":{$gt:80,$lt:100}},{_id:0,name:1,borough:1,cuisine:1,grades:1}).pretty().limit(5)
+"grades.score":{$gt:80,$lt:100}
+
+10. Write a MongoDB query to find the restaurants which locate in latitude value less than -
+95.754168.
+db.resto.find({"address.coord.1":{$lt:95.754168}},{_id:0,name:1,borough:1,cuisine:1,"address.coord":1}).pretty().limit(5)
+"address.coord.1":{$lt:95.754168}
+
+11. Write a MongoDB query to find the restaurants that do not prepare any cuisine of
+'American' and their grade score more than 70 and latitude less than -65.754168.
+db.resto.find({cuisine:{$ne:"American"},"grades.score":{$gt:70},"address.coord.0":{$lt:-65.754168}}).pretty().limit(5)
+cuisine:{$ne:"American"}
+"grades.score":{$gt:70}
+"address.coord.1":{$lt:}
+
+12. Write a MongoDB query to find the restaurants which do not prepare any cuisine of
+'American' and achieved a score more than 70 and located in the longitude less than -
+65.754168.
+db.resto.find({},{_id:0,name:1,borough:1,cuisine:1}).pretty().limit(5)
+
+
+
+13. Write a MongoDB query to find the restaurants which do not prepare any cuisine of
+'American ' and achieved a grade point 'A' not belongs to the borough Brooklyn. The
+document must be displayed according to the cuisine in descending order.
+db.resto.find({cuisine:{$ne:"American"},"grades.grade":"A",borough:{$ne:"Brooklyn"}},{_id:0,name:1,borough:1,cuisine:1}).pretty().limit(5).sort({cuisine:0})
+cuisine:{$ne:"American"}
+"grades.grade":"A"
+borough:{$ne:"Brooklyn"}
+.sort({cuisine:1})
+
+14. Write a MongoDB query to find the restaurant Id, name, borough and cuisine for those
+restaurants which contain 'Wil' as first three letters for its name.
+db.resto.find({name:/^Wil/},{_id:0,name:1,borough:1,cuisine:1}).pretty().limit(5)
+name:/^Wil/
+
+15. Write a MongoDB query to find the restaurant Id, name, borough and cuisine for those
+restaurants which contain 'ces' as last three letters for its name.
+db.resto.find({name:/.*ces$/},{_id:0,name:1,borough:1,cuisine:1}).pretty().limit(5)
+name:/ces$/
+
+16. Write a MongoDB query to find the restaurant Id, name, borough and cuisine for those
+restaurants which contain 'Reg' as three letters somewhere in its name.
+db.resto.find({name:/Reg/},{_id:0,name:1}).pretty().limit(5)
+name:/Reg/
+
+17. Write a MongoDB query to find the restaurants which belong to the borough Bronx and
+prepared either American or Chinese dish.
+db.resto.find({borough:"Bronx",cuisine:{$in:["American","Chinese"]}},{_id:0,name:1,borough:1,cuisine:1}).pretty().limit(5)
+borough:"Bronx"
+cuisine:{$in:["American","Chinese"]}
+
+18. Write a MongoDB query to find the restaurant Id, name, borough and cuisine for those
+restaurants which belong to the borough Staten Island or Queens or Bronxor Brooklyn.
+db.resto.find({borough:{$in:["Staten Island","Queens","Bronxor", "Brooklyn"]}},{_id:0,name:1,borough:1,cuisine:1}).pretty().limit(5)
+borough:{$in:["Staten Island","Queens","Bronxor Brooklyn"]}
+
+
+19. Write a MongoDB query to find the restaurant Id, name, borough and cuisine for those
+restaurants which are not belonging to the borough Staten Island or Queens or Bronxor
+Brooklyn.
+db.resto.find({borough:{$nin:["Staten Island","Queens","Bronxor", "Brooklyn"]}},{_id:0,name:1,borough:1,cuisine:1}).pretty().limit(5)
+borough:{$nin:["Staten Island","Queens","Bronxor Brooklyn"]}
+
+
+
+20. Write a MongoDB query to find the restaurant Id, name, borough and cuisine for those
+restaurants which achieved a score which is not more than 10.
+db.resto.find({"grades.score":{$not:{$gt:10}}},{_id:0,name:1,"grades.score":1}).pretty().limit(5)
+"grades.score":{$not:{$ngt:10}}
+$not:{$ngt:10}
+
+21. Write a MongoDB query to find the restaurant Id, name, borough and cuisine for those
+restaurants which prepared dish except 'American' and 'Chinees' or restaurant's name begins
+with letter 'Wil'.
+db.resto.find({cuisine:{$nin:["American","Chinese"]}},{_id:0,name:1,cuisine:1}).pretty()
+
+cuisine:{$nin:["American","Chinese"]}
+
+
+22. Write a MongoDB query to find the restaurant Id, name, and grades for those restaurants
+which achieved a grade of "A" and scored 11 on an ISODate "2014-08-11T00:00:00Z"
+among many of survey dates
+db.resto.find({},{_id:0,name:1,borough:1,cuisine:1}).pretty()
+"grades.grade":"A"
+"grades.score":11
+	
+
+23. Write a MongoDB query to find the restaurant Id, name and grades for those restaurants
+where the 2nd element of grades array contains a grade of "A" and score 9 on an ISODate
+"2014-08-11T00:00:00Z".
+db.resto.find({},{_id:0,name:1,borough:1,cuisine:1}).pretty()
+
+
+
+24. Write a MongoDB query to find the restaurant Id, name, address and geographical
+location for those restaurants where 2nd element of coord array contains a value which is
+more than 42 and upto 52
+db.resto.find({},{_id:0,name:1,borough:1,cuisine:1}).pretty()
+
+
+
+25. Write a MongoDB query to arrange the name of the restaurants in ascending order along
+with all the columns.
+db.resto.find({},{_id:0,name:1,borough:1,cuisine:1}).pretty()
+
+
+26. Write a MongoDB query to arrange the name of the restaurants in descending along with
+all the columns.
+db.resto.find({},{_id:0,name:1,borough:1,cuisine:1}).pretty()
+
+
+27. Write a MongoDB query to arranged the name of the cuisine in ascending order and for
+that same cuisine borough should be in descending order.
+
+
+
+28. Write a MongoDB query to know whether all the addresses contains the street or not.
+
+
+29. Write a MongoDB query which will select all documents in the restaurants collection
+where the coord field value is Double.
+
+
+30. Write a MongoDB query which will select the restaurant Id, name and grades for those
+restaurants which returns 0 as a remainder after dividing the score by 7.
+
+
+31. Write a MongoDB query to find the restaurant name, borough, longitude and attitude and
+cuisine for those restaurants which contains 'mon' as three letters somewhere in its name.
+
+
+32. Write a MongoDB query to find the restaurant name, borough, longitude and latitude and
+cuisine for those restaurants which contain 'Mad' as first three letters of its name.
+
+
+db.createCollection("users");
+db.users.insertMany([
+{name:"Amit Bharat",
+age:28,
+city:"Valsad",
+course:"DAC"},
+{name:"Anish Rachca",
+age:22,
+city:"Nagar",
+course:"DAC"},
+{name:"Ritvik |Thummar",
+age:22,
+city:"Ahmedabad",
+course:"Dbda"}]);
+
+db.users.find().pretty();
+
+
+
+        "_id" : ObjectId("5aaa31ee639395f86922a87f"),
+        "name" : "3 idiots",
+        "actor" : [
+                "Kareena Kapoor",
+                "amir",
+                "kareena",
+                "mahadavan",
+                "sharman"
+        ],
+        "rating" : 8,
+        "ticket_no" : 150,
+        "price" : 200
+		
+db.users.insert(
+{name:"3 idiots",
+actor:[
+"Kareena Kapoor",
+"Amir Khan",
+"R.Madhavan",
+"Sharman Joshi"
+],
+rating:8,
+ticket_no:230
+}
+)
+
+Create a Employee Collection add 5 documents:
+Example:
+{empno:111,ename:”Deepali
+Vaidya”,sal:40000.00,dept:{deptno12,dname:,”Hr”,dloc:”Mumbai},
+
+Desg:”Analyst”,mgr:{name:”Satish”,num:111},project:[{name:”Project-
+1”,Hrs:4},{name:”project- 2”,Hrs:4}]}
+‘CLERK’,Tushar,“purchase department”,“HR”,manager is Rajan or Revati
+
+db.createCollection("Emps");
+db.Emps.insertMany([
+{
+empno:111,
+ename:"Deepali Vaidya",
+sal:40000.00,
+dept:{deptno:12,dname:"Hr",dloc:"Mumbai"},
+Desg:"Analyst",
+mgr:{name:"Satish",num:111},
+project:[{name:"Project-1",Hrs:4},{name:"project-2",Hrs:4}]
+},
+{
+empno:112,
+ename:"Tushar Patil",
+sal:50000.00,
+dept:{deptno:10,dname:"purchase department",dloc:"Pune"},
+Desg:"Manager",
+mgr:{name:"Hemant",num:112},
+project:[{name:"Project-2",Hrs:5},{name:"project-3",Hrs:7}]
+},
+{empno:113,
+ename:"John Doe",
+sal:45000.00,
+dept:{deptno:13,dname:"Sales",dloc:"Mumbai"},
+Desg:"Engineer",
+mgr:{name:"Satish",num:111},
+project:[{name:"Project-4",Hrs:3},{name:"project-2",Hrs:4}
+]}
+]);
+
+db.Emps.find({},{_id:0,"mgr.name":1}).pretty();
+
+
+"project.1.name":
+"mgr.name":"Hemant"
+
