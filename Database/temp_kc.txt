@@ -1,0 +1,142 @@
+Software Requirements Specification (SRS) for Farmers' Web Application
+
+1. Introduction
+1.1 Purpose
+The purpose of this document is to provide a detailed specification of requirements
+for the Farmers' Web Application. This application aims to facilitate farmers in managing
+their agricultural activities, accessing relevant information, and connecting with other
+stakeholders in the agricultural industry.
+
+1.2 Scope
+The web application will serve as a platform for farmers to access various services such as
+market information, weather updates, crop management techniques, financial support, and interaction
+with other farmers and experts. It will be accessible through web browsers on desktop and mobile devices.
+
+1.3 Stakeholders
+-Farmers: Primary users of the application, seeking information and services related to farming.
+-Administrators: Responsible for managing the application and its content.
+-Agricultural Experts: Provide guidance and support to farmers.
+-Government Agencies: Provide relevant information and services to farmers.
+-Financial Institutions: Offer financial support and services to farmers.
+
+2. System Overview
+
+2.1 Functionalities
+The Farmers' Web Application will include the following core functionalities:
+-User Registration and Login: Farmers can create accounts and log in to access personalized services.
+-Dashboard: Provides an overview of personalized information such as weather updates, market prices, and upcoming tasks.
+-Market Information: Farmers can access real-time market prices, demand-supply information, and trade opportunities.
+-Crop Management: Information on crop selection, cultivation techniques, pest control, and fertilization practices.
+-Weather Forecast: Access to current weather conditions and future forecasts relevant to the farmer's location.
+-Financial Support: Information on available agricultural loans, subsidies, and government schemes.
+-Community Forum: Farmers can connect with other farmers, experts, and exchange knowledge and experiences.
+2.2 System Interfaces
+The web application will have the following interfaces:
+-User Interface (UI): Allows users to interact with the application using web browsers on desktop and mobile devices.
+-Database: Stores user profiles, market data, weather information, and other relevant data.
+-External APIs: Integration with external services such as weather APIs and market data providers.
+
+3. System Requirements
+
+3.1 Functional Requirements
+a) User Registration and Login
+- Farmers can register accounts by providing necessary information.
+- User authentication and secure login functionality.
+
+b) Dashboard
+- Personalized dashboard displaying weather updates, market prices, upcoming tasks, and relevant news.
+- Ability to customize and prioritize displayed information.
+
+c) Market Information
+- Real-time market prices for different crops and commodities.
+- Notifications and alerts for price fluctuations and trade opportunities.
+
+d) Crop Management
+- Comprehensive information on various crops, including cultivation techniques, fertilizers, and pest control.
+- Crop selection guidance based on factors such as soil type, climate, and market demand.
+
+e) Weather Forecast
+- Integration with weather APIs to provide current weather conditions and future forecasts.
+- Location-based weather information and alerts.
+
+f) Financial Support
+- Information on available agricultural loans, subsidies, and government schemes.
+- Assistance in application procedures and eligibility criteria.
+
+g) Community Forum
+- Discussion forum for farmers to share experiences, ask questions, and seek advice.
+- Ability to search and filter forum topics.
+
+3.2 Non-Functional Requirements
+a) Performance
+- Fast and responsive user interface, providing real-time information. Efficient handling of concurrent user requests.
+
+b) Security
+- Secure user authentication and data protection.
+- Protection against common web application vulnerabilities.
+
+c) Usability
+- Intuitive and user-friendly interface for easy navigation and interaction.
+- Responsive design for seamless access on different devices.
+
+4. Cunclusion
+In conclusion, the Farmers' Web Application aims to provide farmers with a comprehensive platform
+for accessing agricultural information and services. The application will enable farmers to stay
+updated on market prices, weather conditions, crop management techniques, and financial support options.
+It will also facilitate communication and knowledge sharing through a community forum. By fulfilling these
+requirements, the Farmers' Web Application will empower farmers to make informed decisions, enhance their
+productivity, and connect with experts and other stakeholders in the agricultural industry.
+
+Tables:
+
+User Table:
+user_id (Primary Key, Integer)
+username (VARCHAR(20), Unique, Not Null)
+password (VARCHAR(20), Not Null)
+email (VARCHAR(50), Unique, Not Null)
+role (VARCHAR(20), Not Null)
+
+Farmer Table:
+farmer_id (Primary Key, Integer)
+user_id (Foreign Key referencing User Table)
+full_name (VARCHAR(50), Not Null)
+address (VARCHAR(100))
+phone_number (VARCHAR(20))
+
+Crop Table:
+crop_id (Primary Key, Integer)
+crop_name (VARCHAR(50), Not Null)
+crop_description (VARCHAR(255))
+
+MarketPrice Table:
+price_id (Primary Key, Integer)
+crop_id (Foreign Key referencing Crop Table)
+price_date (Date, Not Null)
+market_price (Decimal, Not Null)
+
+Weather Table:
+weather_id (Primary Key, Integer)
+location (VARCHAR(50), Not Null)
+weather_date (Date, Not Null)
+temperature (Decimal, Not Null)
+humidity (Decimal, Not Null)
+rainfall (Decimal, Not Null)
+
+FinancialSupport Table:
+support_id (Primary Key, Integer)
+support_name (VARCHAR(50), Not Null)
+support_description (VARCHAR(255))
+
+ForumPost Table:
+post_id (Primary Key, Integer)
+user_id (Foreign Key referencing User Table)
+post_date (Date, Not Null)
+post_title (VARCHAR(100), Not Null)
+post_content (VARCHAR(1000), Not Null)
+
+Comment Table:
+comment_id (Primary Key, Integer)
+post_id (Foreign Key referencing ForumPost Table)
+user_id (Foreign Key referencing User Table)
+comment_date (Date, Not Null)
+comment_content (VARCHAR(500), Not Null)

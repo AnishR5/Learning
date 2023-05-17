@@ -1,0 +1,109 @@
+Online Ticket Reservation System
+1. Introduction
+
+The Online Ticket Reservation System is a web-based application that allows users to search
+for and reserve tickets for various events, such as concerts, movies, sports events, and theater shows.
+The system provides an easy and convenient way for users to browse available events,
+view seat availability, make reservations, and purchase tickets online.
+
+2. Scope
+The scope of the online ticket reservation application includes user management, event management,
+event search and browsing, seat selection and reservation, ticket purchase, booking confirmation,
+and adherence to non-functional requirements. It aims to provide users with a platform to register and authenticate,
+browse and search for events, select and reserve seats, purchase tickets securely, receive booking confirmations,
+and ensure performance, security, user-friendliness, and reliability of the system. The scope may vary based on
+specific project requirements and can be adjusted to accommodate additional features as needed.
+
+3. Functional Requirements
+
+3.1 User Registration and Authentication
+The system shall provide a user registration mechanism allowing new users to create an account.
+Users shall be able to log in to the system using their registered credentials.
+The system shall support password reset functionality for users who have forgotten their passwords.
+3.2 Event Management
+The system shall provide an interface for administrators to manage events.
+Administrators shall be able to add new events, including event details (title, date, time, location, etc.).
+Administrators shall be able to update existing events and delete events that are no longer relevant.
+3.3 Event Search and Browsing
+The system shall allow users to search for events based on different criteria (e.g., event type, location, date).
+Users shall be able to browse events by category or view all available events.
+The system shall display relevant event details, such as title, date, time, location, and ticket availability.
+3.4 Seat Selection and Reservation
+The system shall provide a seating plan for each event, showing available and reserved seats.
+Users shall be able to select seats from the seating plan and reserve them for a specific event.
+The system shall prevent multiple users from reserving the same seat simultaneously.
+3.5 Ticket Purchase
+The system shall enable users to purchase reserved tickets.
+Users shall be able to select the desired number of tickets and proceed to payment.
+The system shall integrate with a secure payment gateway to process online transactions.
+3.6 Booking Confirmation
+Upon successful ticket purchase, the system shall generate a booking confirmation with a unique booking reference number.
+The booking confirmation shall include event details, seat numbers, and the total amount paid.
+Users shall receive the booking confirmation via email and have the option to print it.
+
+4. Non-Functional Requirements
+4.1 Performance
+The system shall be capable of handling multiple concurrent user requests without significant performance degradation.
+Response times for user interactions (search, seat selection, ticket purchase) shall be within acceptable limits.
+4.2 Security
+User authentication and sensitive information (e.g., passwords, payment details) shall be securely stored and transmitted.
+The system shall implement appropriate security measures, such as encryption and secure communication protocols, to protect user data.
+4.3 User-Friendly Interface
+The system shall have an intuitive and user-friendly interface.
+The user interface shall be responsive and compatible with different devices (e.g., desktop, mobile).
+4.4 Availability and Reliability
+The system shall have a high availability rate to ensure users can access it at all times.
+The system shall handle errors gracefully and provide appropriate error messages to users.
+
+5. Constraints
+5.1 Technology Constraints
+The system shall be developed as a web-based application using a combination of HTML, CSS, and JavaScript for the frontend.
+The backend shall be implemented using a server-side programming language (e.g., Python, Java, PHP) and a suitable database
+management system (e.g., MySQL, PostgreSQL).
+
+6. Assumptions and Dependencies
+6.1 Assumptions
+Users have access to a modern web browser to interact with the system.
+An internet connection is required to access the online ticket reservation system.
+Users will provide valid and accurate information during registration and ticket purchase.
+
+6.2 Dependencies
+The system will depend on the availability and proper functioning of the payment gateway for online transactions.
+The system will rely on external email services to send booking confirmations to users.
+This is just an example, and the actual SRS document may vary based on specific project requirements.
+
+Customer Table:
+customer_id (Primary Key)
+first_name
+last_name
+email
+phone_number
+address
+
+Event Table:
+event_id (Primary Key)
+event_name
+event_date
+event_time
+location
+description
+
+Reservation Table:
+reservation_id (Primary Key)
+customer_id (Foreign Key referencing Customer Table)
+event_id (Foreign Key referencing Event Table)
+reservation_date
+total_tickets
+
+Ticket Table:
+ticket_id (Primary Key)
+event_id (Foreign Key referencing Event Table)
+seat_number
+price
+
+Payment Table:
+payment_id (Primary Key)
+reservation_id (Foreign Key referencing Reservation Table)
+payment_date
+amount
+

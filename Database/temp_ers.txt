@@ -1,0 +1,144 @@
+Employee Recruitment System
+1. Introduction
+The Employee Recruitment System is a web-based application designed to streamline the recruitment
+process within an organization. It aims to facilitate efficient job posting, application submission,
+applicant tracking, and interview scheduling. The system provides a user-friendly interface for both
+recruiters and job seekers, ensuring a seamless recruitment experience and enhancing the overall efficiency of the hiring process.
+
+2. Functional Requirements
+
+2.1 User Registration and Authentication
+The system shall provide user registration functionality for both recruiters and job seekers.
+Users shall be able to create accounts by providing required information.
+User authentication shall be implemented to ensure secure access to the system.
+
+2.2 Job Posting
+Recruiters shall have the ability to create and publish job postings.
+Job postings shall include details such as job title, description, requirements, and application deadlines.
+Recruiters shall be able to edit or remove job postings as needed.
+
+2.3 Job Search and Filtering
+Job seekers shall be able to search for job opportunities based on various criteria such as job title, location, and keywords.
+The system shall provide filtering options to refine job search results based on job type, salary range, and other relevant factors.
+
+2.4 Application Submission
+Job seekers shall be able to submit their applications for desired job postings.
+The system shall allow applicants to upload their resumes, cover letters, and other required documents.
+Application submission shall be secure and support file formats commonly used in the recruitment process.
+
+2.5 Applicant Tracking
+Recruiters shall have access to an applicant tracking system to manage received applications.
+Recruiters shall be able to review and evaluate applicants' qualifications and skills.
+The system shall provide features to track the status of applications, such as shortlisted, rejected, or interviewed.
+
+2.6 Interview Scheduling
+Recruiters shall have the ability to schedule and manage interviews with shortlisted candidates.
+The system shall send notifications and reminders to both recruiters and candidates about interview details.
+Recruiters shall be able to update interview schedules and notify candidates of any changes.
+
+2.7 Communication and Collaboration
+The system shall facilitate communication between recruiters and applicants.
+Recruiters shall be able to send messages, notifications, and updates to applicants.
+Applicants shall have the ability to ask questions and seek clarifications from recruiters.
+
+2.8 Reporting and Analytics
+The system shall generate reports and analytics related to job postings, applications, and the hiring process.
+Recruiters shall have access to metrics such as the number of applications, applicant demographics, and hiring success rates.
+The system shall provide visual representations of data through charts and graphs.
+
+2.9 System Administration
+The system shall have an administrative panel to manage user accounts, permissions, and system configurations.
+Administrators shall have the ability to add, modify, or remove user accounts and roles.
+The system shall enforce role-based access control to ensure data security and privacy.
+
+2.10 Integration
+The system shall integrate with external platforms or services for background checks, reference verification, or other necessary third-party services.
+Integration shall be implemented securely and in compliance with privacy regulations.
+
+3. Non-Functional Requirements
+
+3.1 Security
+User authentication and sensitive information shall be securely stored and transmitted.
+Access to personal data and confidential information shall be restricted based on user roles and permissions.
+The system shall implement encryption and secure communication protocols to protect data.
+
+3.2 Performance
+The system shall be capable of handling a large number of concurrent users and job postings.
+Response times for searching, application submission, and other critical operations shall meet acceptable performance standards.
+The system shall be scalable to accommodate future growth and increasing demands.
+
+3.3 User Interface
+The user interface shall be intuitive, user-friendly, and accessible across different devices and browsers.
+Consistent design elements and navigation patterns shall be implemented throughout the system.
+The system shall provide appropriate error messages and validation checks to guide users and prevent data entry errors.
+
+3.4 Documentation
+The system shall be accompanied by comprehensive user documentation, including user guides and FAQs.
+Technical documentation shall be provided to assist system administrators in configuration, maintenance, and troubleshooting.
+
+4. Conclusion
+The Employee Recruitment System is a streamlined solution that simplifies the recruitment process. It offers features like
+job posting, application submission, applicant tracking, interview scheduling, and communication. With a focus on security,
+performance, and user-friendly interface, the system improves efficiency for recruiters and enhances the experience for job
+seekers. The Software Requirements Specification (SRS) document provides a detailed outline for the system's requirements, 
+serving as a blueprint for development.
+
+Tables:
+
+Candidate Table:
+candidate_id (Integer, Primary Key)
+first_name (VARCHAR(20), Not Null)
+last_name (VARCHAR(20), Not Null)
+email (VARCHAR(20), Unique, Not Null)
+phone_number (VARCHAR(20))
+address (VARCHAR(255))
+experience_id (Foreign Key referencing Experience Table)
+education_id (Foreign Key referencing Education Table)
+
+Job Posting Table:
+job_id (Integer, Primary Key)
+job_title (VARCHAR(20), Not Null)
+company_name (VARCHAR(20), Not Null)
+location_id (Foreign Key referencing Location Table)
+description (VARCHAR(255), Not Null)
+requirements (VARCHAR(255), Not Null)
+application_deadline (Date, Not Null)
+
+Application Table:
+application_id (Integer, Primary Key)
+job_id (Integer, Foreign Key referencing Job Posting Table)
+candidate_id (Integer, Foreign Key referencing Candidate Table)
+application_date (Date, Not Null)
+status (VARCHAR(20), Not Null)
+
+Interview Table:
+interview_id (Integer, Primary Key)
+job_id (Integer, Foreign Key referencing Job Posting Table)
+candidate_id (Integer, Foreign Key referencing Candidate Table)
+interview_date (Date, Not Null)
+interview_location (VARCHAR(255))
+interviewer (VARCHAR(20))
+status (VARCHAR(20), Not Null)
+
+User Table:
+user_id (Integer, Primary Key)
+username (VARCHAR(20), Unique, Not Null)
+password (VARCHAR(20), Not Null)
+email (VARCHAR(20), Unique, Not Null)
+role_id (Foreign Key referencing Role Table)
+
+Experience Table:
+experience_id (Integer, Primary Key)
+experience_description (VARCHAR(255))
+
+Education Table:
+education_id (Integer, Primary Key)
+education_description (VARCHAR(255))
+
+Location Table:
+location_id (Integer, Primary Key)
+location_name (VARCHAR(20))
+
+Role Table:
+role_id (Integer, Primary Key)
+role_name (VARCHAR(20))
